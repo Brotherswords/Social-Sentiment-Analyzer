@@ -2,10 +2,10 @@ package main
 
 import (
 	//"bufio"
+	"bufio"
 	"encoding/csv"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
@@ -13,12 +13,18 @@ import (
 
 func main() {
 	m := map[string]float64{}
+	totalScore := 0.0
 
-	m["Among Us"] = 1
-	
-	for key, value := range m {
-		fmt.Println(key, value)
-	}
+	fmt.Println("input text:")
+    scannerLocal := bufio.NewScanner(os.Stdin)
+    scannerLocal.Scan()
+    err := scannerLocal.Err()
+    if err != nil {
+        log.Fatal(err)
+    }
+    fileName := scannerLocal.Text()
+
+	fmt.Println(":scream: OMG the SCORE for this MESSAGE is: ");
 	csvfile, err := os.Open("socialsent.csv")
 	if err != nil {
 		log.Fatalln("Couldn't open the csv file", err)
@@ -26,6 +32,7 @@ func main() {
 
 	// Parse the file
 	r := csv.NewReader(csvfile)
+	// There should be only one.
 
 	// Iterate through the records
 	for {
@@ -40,20 +47,30 @@ func main() {
 		floatVal, err := strconv.ParseFloat(wordVector[1],32)
 		m[wordVector[0]] = floatVal
 	}
+	f, err := os.Open(fileName)
+ 
+    if err != nil {
+		fmt.Println(err)
+    }
 
-	for {    
-		content, err := ioutil.ReadFile("Nixon.txt")
+    defer f.Close()
 
-		if err != nil {
-			log.Fatal(err)
+    scanner := bufio.NewScanner(f)
+    scanner.Split(bufio.ScanWords)
+
+    for scanner.Scan() {
+
+        //fmt.Println(scanner.Text())
+		if val, ok := m[scanner.Text()]; ok {
+			totalScore += val	
 		}
-	}
+    }
+
+    if err := scanner.Err(); err != nil {
+        fmt.Println(err)
+    }
+	fmt.Println(totalScore)
 }
-	/*
-	for key, value := range m {
-		fmt.Println(key, value)
-	}
-	*/
 
 
 
