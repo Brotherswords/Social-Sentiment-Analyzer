@@ -23,8 +23,6 @@ func main() {
         log.Fatal(err)
     }
     fileName := scannerLocal.Text()
-
-	fmt.Println(":scream: OMG the SCORE for this MESSAGE is: ");
 	csvfile, err := os.Open("socialsent.csv")
 	if err != nil {
 		log.Fatalln("Couldn't open the csv file", err)
@@ -69,7 +67,19 @@ func main() {
     if err := scanner.Err(); err != nil {
         fmt.Println(err)
     }
-	fmt.Println(totalScore)
+	fmt.Println(fileName, "sentiment score :", totalScore)
+	fmt.Print(fileName, " star count: ")
+	if totalScore < -5{
+		fmt.Printf("1 Star")
+	}else if totalScore < -1{
+		fmt.Printf("2 Stars")
+	}else if totalScore < 1{
+		fmt.Printf("3 Stars")
+	}else if totalScore < 5{
+		fmt.Printf("4 Stars")
+	}else if totalScore > 5{
+		fmt.Printf("5 Stars")
+	}
 }
 
 
