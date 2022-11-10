@@ -61,6 +61,8 @@ func main() {
         //fmt.Println(scanner.Text())
 		if val, ok := m[scanner.Text()]; ok {
 			totalScore += val	
+			fmt.Println(scanner.Text(), ":", val,",", totalScore)
+
 		}
     }
 
