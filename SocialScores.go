@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"os"
 	"strconv"
 )
@@ -43,6 +44,7 @@ func main() {
 			log.Fatal(err)
 		}
 		floatVal, err := strconv.ParseFloat(wordVector[1],32)
+		floatVal = roundFloat(floatVal,2)
 		m[wordVector[0]] = floatVal
 	}
 	f, err := os.Open(fileName)
@@ -59,8 +61,10 @@ func main() {
     for scanner.Scan() {
 
         //fmt.Println(scanner.Text())
+
 		if val, ok := m[scanner.Text()]; ok {
-			totalScore += val	
+			totalScore += roundFloat(val,2)	
+			totalScore = roundFloat(totalScore,2)
 			fmt.Println(scanner.Text(), ":", val,",", totalScore)
 
 		}
@@ -84,5 +88,8 @@ func main() {
 	}
 }
 
-
+func roundFloat(val float64, precision uint) float64 {
+    ratio := math.Pow(10, float64(precision))
+    return math.Round(val*ratio) / ratio
+}
 
